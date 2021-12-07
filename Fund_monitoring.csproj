@@ -75,7 +75,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParseJsonToCards.cs" />
     <Compile Include="ParseXlsToJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

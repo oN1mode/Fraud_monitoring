@@ -24,18 +24,8 @@ namespace Fund_monitoring
         public MainWindow()
         {
             InitializeComponent();
-            ParseXlsToJson.Start();
-            try
-            {
-                cards = new Cards();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                throw;
-            }
-            
-            
+            ParseXlsToJson.ParseAndSerializationXlsToJson();
+            cards = new Cards();
         }
     }
 }

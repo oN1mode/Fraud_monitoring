@@ -7,17 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Fund_monitoring
 {
-    class ParseXlsToJson
+    public class ParseXlsToJson
     {
-        public static void Start()
-        {
-            ParseAndSerializationXlsToJson();
-        }
 
-        private static void ParseAndSerializationXlsToJson()
+        public static void ParseAndSerializationXlsToJson()
         {
             using (var connection = new OleDbConnection(HelperClassWithConst.connectionString))
             {
@@ -46,6 +43,23 @@ namespace Fund_monitoring
                     File.WriteAllText(HelperClassWithConst.pathToJson, json);
                 }
             }
+        }
+
+        public static List<Card> ParseDataJsonToCards()
+        {
+            List<Card> cards = new List<Card>();
+            string jStr = File.ReadAllText(HelperClassWithConst.pathToJson);
+
+            JArray jObj = JArray.Parse(jStr);
+
+            IList<JToken> results = jObj.Children().ToList();
+
+            foreach (JToken result in results)
+            {
+                Card card = result.ToObject<Card>();
+                cards.Add(card);
+            }
+            return cards;
         }
     }
 }
