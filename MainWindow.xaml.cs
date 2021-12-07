@@ -23,6 +23,7 @@ namespace Fund_monitoring
         public MainWindow()
         {
             InitializeComponent();
+            ParseXlsToJson.Start();
         }
     }
 }
