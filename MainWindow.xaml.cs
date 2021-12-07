@@ -20,10 +20,22 @@ namespace Fund_monitoring
     /// </summary>
     public partial class MainWindow : Window
     {
+        Cards cards;
         public MainWindow()
         {
             InitializeComponent();
             ParseXlsToJson.Start();
+            try
+            {
+                cards = new Cards();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
+            }
+            
+            
         }
     }
 }

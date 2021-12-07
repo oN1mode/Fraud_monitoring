@@ -10,13 +10,14 @@ using System.Collections;
 
 namespace Fund_monitoring
 {
-    class Cards
+    public class Cards
     {
         public List<Card> DataCards { get; set; }
 
-        public void LoadDataFromJSON()
+        public Cards()
         {
-            
+            DataCards = ParseJsonToCards.ParseDataJsonToCards();
         }
+
     }
 }
