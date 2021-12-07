@@ -32,15 +32,31 @@ namespace Fund_monitoring
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             cards = new Cards();
-            try
-            {
-                numberCard = new NumberCard(Convert.ToInt32(inputNumberCard.Text));
-            }
-            catch (FormatException fExc)
-            {
-                Debug.WriteLine($"{fExc.Message}, {fExc.GetType()}");
-                MessageBox.Show("Вы ввели некорректный номер карты!");
-            }
+            if (inputNumberCard.Text.Length == 6) numberCard = new NumberCard(Convert.ToInt32(inputNumberCard.Text));
+            else MessageBox.Show("Вы ввели некорректный номер карты! \nДля проверки карты необходимо ввести 6 цифр.");
         }
+
+        #region EventForInputNumberCard
+        private void inputNumberCard_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            inputNumberCard.Clear();
+        }
+        private void inputNumberCard_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (inputNumberCard.Text == "Введите номер карты") inputNumberCard.Clear();
+        }
+        #endregion
+
+        #region EventForInputValueRegulation
+        private void inputValueRegulation_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            inputValueRegulation.Clear();
+        }
+        private void inputValueRegulation_GotFocus_1(object sender, RoutedEventArgs e)
+        {
+            if (inputValueRegulation.Text == "Введите значение правила") inputValueRegulation.Clear();
+        }
+        #endregion
+
     }
 }
