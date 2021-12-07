@@ -16,7 +16,7 @@ namespace Fund_monitoring
 
         public Cards()
         {
-            DataCards = ParseJsonToCards.ParseDataJsonToCards();
+            DataCards = ParseXlsToJson.ParseDataJsonToCards();
         }
 
     }
