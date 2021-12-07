@@ -5,12 +5,68 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fund_monitoring"
         mc:Ignorable="d"
-        Title="Fund Monitoring" 
-        
-        
-        Height="450" 
+        Title="MainWindow" 
+        MinHeight="400"
+        MinWidth="800"
+        MaxHeight="1400"
+        MaxWidth="1600"
+        Height="400" 
         Width="800">
     <Grid>
-        
+        <Grid.Background>
+            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.InfoColorKey}}"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" VerticalAlignment="Top" Margin="10">
+            <ComboBox x:Name="cb" Margin="10,10,176,10" Padding="10">
+                <TextBlock Text="BIN"/>
+                <TextBlock Text="BRAND"/>
+                <TextBlock Text="BIN_TYPE"/>
+                <TextBlock Text="BIN_LEVEL"/>
+                <TextBlock Text="COUNTRY2_ISO"/>
+                <TextBlock Text="TypeOfTranscription"/>
+            </ComboBox>
+            <ComboBox Margin="10,80,176,50" Padding="10">
+                <TextBlock Text="Равен"/>
+                <TextBlock Text="Не равен"/>
+            </ComboBox>
+            <TextBox 
+                HorizontalAlignment="Center" 
+                Height="35" 
+                Margin="10" 
+                TextWrapping="Wrap" 
+                TextAlignment="Left"
+                Text="" 
+                VerticalAlignment="Top" 
+                Width="195">
+                <TextBox.Background>
+                    <SolidColorBrush Color="White"/>
+                </TextBox.Background>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10">
+            <TextBox x:Name="inputNumberCard"
+                HorizontalAlignment="Center" 
+                Height="35" 
+                Margin="10" 
+                TextWrapping="Wrap" 
+                Text="" 
+                VerticalAlignment="Top" 
+                Width="195"/>
+            <Button 
+                Content="Проверить" 
+                HorizontalAlignment="Stretch" 
+                Margin="10" 
+                VerticalAlignment="Center" 
+                Width="195" 
+                Height="48" 
+                Click="Button_Click" FontSize="16"/>
+        </StackPanel>
+
     </Grid>
 </Window>
