@@ -23,13 +23,15 @@ namespace Fund_monitoring
     {
         NumberCard numberCard;
         Cards cards;
+        Dictionary<string, string> listRegulations;
+
         public MainWindow()
         {
             InitializeComponent();
             ParseXlsToJson.ParseAndSerializationXlsToJson();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnCheckCard_Click(object sender, RoutedEventArgs e)
         {
             cards = new Cards();
             if (inputNumberCard.Text.Length == 6) numberCard = new NumberCard(Convert.ToInt32(inputNumberCard.Text));
@@ -52,11 +54,33 @@ namespace Fund_monitoring
         {
             inputValueRegulation.Clear();
         }
-        private void inputValueRegulation_GotFocus_1(object sender, RoutedEventArgs e)
+        private void inputValueRegulation_GotFocus(object sender, RoutedEventArgs e)
         {
             if (inputValueRegulation.Text == "Введите значение правила") inputValueRegulation.Clear();
         }
         #endregion
 
+
+        private void cbTypeTransaction_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            listRegulations = new Dictionary<string, string>();
+        }
+
+        private void btnAddRegulation_Click(object sender, RoutedEventArgs e)
+        {
+            if (listRegulations.Count == 0) listRegulations.Add("TypeTranzaction", cbTypeTransaction.Text);
+            if (cbTypeTransaction.SelectedIndex > -1 && 
+                cbRegulation.SelectedIndex > -1 && 
+                cbEquality.SelectedIndex > -1 && 
+                inputValueRegulation.Text != null && 
+                inputValueRegulation.Text != "Введите значение правила")
+            {
+                string equality;
+                if (cbEquality.Text == "Равно") equality = "=";
+                else equality = "!";
+                listRegulations.Add(cbRegulation.Text, equality + inputValueRegulation.Text.Trim().ToUpper());
+            }
+            else MessageBox.Show("Вы не заполнили все поля для добавления правила");
+        }
     }
 }

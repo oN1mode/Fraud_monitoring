@@ -5,57 +5,58 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fund_monitoring"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="Fraud monitoring" 
+        FontStyle="Normal"
+        FontSize="14"
         MinHeight="400"
         MinWidth="800"
         MaxHeight="1400"
         MaxWidth="1600"
         Height="400" 
         Width="800">
+    <Window.Background>
+        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.InfoColorKey}}"/>
+    </Window.Background>
+
     <Grid>
-        <Grid.Background>
-            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.InfoColorKey}}"/>
-        </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0" VerticalAlignment="Top" Margin="10" Height="349">
-            <ComboBox Margin="10,10,176,10" Padding="5" Height="35" Text="Вид операции" IsEnabled="True" IsEditable="True">
+            <ComboBox x:Name="cbTypeTransaction" Margin="10,10,150,10" Padding="5" Height="35" Text="Вид операции" IsEditable="True" IsReadOnly="True" Focusable="False" SelectionChanged="cbTypeTransaction_SelectionChanged">
                 <TextBlock Text="Пополнение"/>
                 <TextBlock Text="Списание"/>
             </ComboBox>
-            <ComboBox x:Name="cb" Margin="10,10,176,10" Padding="5" Height="35" Text="Выбор правила проверки" IsEditable="True" IsEnabled="True">
+            <ComboBox x:Name="cbRegulation" Margin="11,10,149,10" Padding="5" Height="35" Text="Выбор правила проверки" IsEditable="True" IsEnabled="True" Focusable="False">
                 <TextBlock Text="BIN"/>
                 <TextBlock Text="BRAND"/>
                 <TextBlock Text="BIN_TYPE"/>
                 <TextBlock Text="BIN_LEVEL"/>
                 <TextBlock Text="COUNTRY2_ISO"/>
             </ComboBox>
-            <RadioButton Content="Не равен" Margin="10,10,0,10" HorizontalAlignment="Left" Width="85"/>
-            <RadioButton Content="Равен" Margin="10,10,0,10" HorizontalAlignment="Left" Width="85"/>
+            <ComboBox x:Name="cbEquality" Margin="10,10,150,10" Padding="5" Height="35" Text="Выбор условия равенства" IsEditable="True" IsEnabled="True" Focusable="False">
+                <TextBlock Text="Равно"/>
+                <TextBlock Text="Не равно"/>
+            </ComboBox>
             <TextBox x:Name="inputValueRegulation"
                 Text="Введите значение правила" 
                 Height="35" 
-                Margin="10,10,176,10" 
+                Margin="10,10,150,10" 
                 Padding="5"
-                TextWrapping="Wrap" 
-                TextAlignment="Left"
-                Background="White" 
                 RenderTransformOrigin="0.5,0.5" 
-                GotFocus="inputValueRegulation_GotFocus_1" 
+                GotFocus="inputValueRegulation_GotFocus" 
                 MouseDoubleClick="inputValueRegulation_MouseDoubleClick" 
                 />
-            <TextBox 
-                Height="35" 
-                Margin="10,10,0,10" 
-                TextWrapping="Wrap" 
-                TextAlignment="Left"
-                Text="" 
-                HorizontalAlignment="Left"
-                Width="190" 
-                Background="White"/>
+            <Button
+                x:Name="btnAddRegulation"
+                Margin="10,10,80,10"
+                Padding="5"
+                Height="50"
+                FontSize="16"
+                Content="Добавить правило проверки" 
+                Click="btnAddRegulation_Click"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1" Margin="10">
@@ -67,16 +68,18 @@
                 TextWrapping="Wrap" 
                 Text="Введите номер карты" 
                 VerticalAlignment="Top" 
-                Width="195" GotFocus="inputNumberCard_GotFocus" MouseDoubleClick="inputNumberCard_MouseDoubleClick"
-                />
+                Width="195" 
+                GotFocus="inputNumberCard_GotFocus" 
+                MouseDoubleClick="inputNumberCard_MouseDoubleClick"/>
             <Button 
-                Content="Проверить" 
+                x:Name="btnCheckCard"
+                Content="Проверить карту" 
                 HorizontalAlignment="Stretch" 
                 Margin="10" 
                 VerticalAlignment="Center" 
                 Width="195" 
-                Height="48" 
-                Click="Button_Click" FontSize="16"/>
+                Height="50" 
+                Click="btnCheckCard_Click" FontSize="16"/>
         </StackPanel>
 
     </Grid>
