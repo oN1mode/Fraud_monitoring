@@ -132,7 +132,12 @@ namespace Fund_monitoring
 
         #endregion
 
-
+        /// <summary>
+        /// Поиск карты из общего списка карт
+        /// </summary>
+        /// <param name="numberCard">Номер карты указанный пользователем</param>
+        /// <param name="cards">Список карт</param>
+        /// <returns></returns>
         private Dictionary<string, string> SearchCardInListCards(int numberCard, Cards cards)
         {
             var cardDict = new Dictionary<string, string>();
@@ -158,6 +163,12 @@ namespace Fund_monitoring
             return cardDict;
         }
 
+        /// <summary>
+        /// Сравнение карты с заданными правилами
+        /// </summary>
+        /// <param name="card">Проверяемая карта</param>
+        /// <param name="regulations">Список заданных правил</param>
+        /// <returns></returns>
         private (bool, string, string) CompareCardWithRegulations(Dictionary<string, string> card, Dictionary<string, string> regulations)
         {
             bool flag = default(bool);
@@ -207,6 +218,10 @@ namespace Fund_monitoring
             return tuple;
         }
 
+        /// <summary>
+        /// Вывод результата проверки
+        /// </summary>
+        /// <param name="resultCompare"></param>
         private void OutputResultCompare((bool, string, string) resultCompare)
         {
             if (resultCompare.Item1 == true)
