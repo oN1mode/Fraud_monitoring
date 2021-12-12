@@ -224,22 +224,31 @@ namespace Fund_monitoring
         /// <param name="resultCompare"></param>
         private void OutputResultCompare((bool, string, string) resultCompare)
         {
-            if (resultCompare.Item1 == true)
+            try
             {
-                MessageBox.Show("Введаная карта успешно прошла проверку по заданным правилам.");
-            }
-            else
-            {
-                if (resultCompare.Item3.First() == '!')
+                if (resultCompare.Item1 == true)
                 {
-                    MessageBox.Show($"Операция {listRegulations.First().Value.ToLower()} невозможна по причине {resultCompare.Item2} равен {resultCompare.Item3.Remove(0,1)}");
+                    MessageBox.Show("Введаная карта успешно прошла проверку по заданным правилам.");
                 }
                 else
                 {
-                    MessageBox.Show($"Операция {listRegulations.First().Value.ToLower()} невозможна по причине {resultCompare.Item2} не равен {resultCompare.Item3.Remove(0,1)}");
+                    if (resultCompare.Item3.First() == '!')
+                    {
+                        MessageBox.Show($"Операция {listRegulations.First().Value.ToLower()} невозможна по причине {resultCompare.Item2} равен {resultCompare.Item3.Remove(0, 1)}");
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Операция {listRegulations.First().Value.ToLower()} невозможна по причине {resultCompare.Item2} не равен {resultCompare.Item3.Remove(0, 1)}");
+                    }
+
                 }
-                
             }
+            catch (ArgumentNullException ArgNullExc)
+            {
+                MessageBox.Show($"Карта {numberCard} не найдена. Проверьте корректность введенных данных.");
+                Debug.WriteLine($"Msg: {ArgNullExc.Message}");
+            }
+            
         }
 
 
