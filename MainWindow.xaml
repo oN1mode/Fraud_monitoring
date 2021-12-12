@@ -29,7 +29,7 @@
                 <TextBlock Text="Пополнение"/>
                 <TextBlock Text="Списание"/>
             </ComboBox>
-            <ComboBox x:Name="cbRegulation" Margin="11,10,149,10" Padding="5" Height="35" Text="Выбор правила проверки" IsEditable="True" IsEnabled="True" Focusable="False">
+            <ComboBox x:Name="cbRegulation" Margin="10,10,150,10" Padding="5" Height="35" Text="Выбор правила проверки" IsEditable="True" IsEnabled="True" Focusable="False">
                 <TextBlock Text="BIN"/>
                 <TextBlock Text="BRAND"/>
                 <TextBlock Text="BIN_TYPE"/>
@@ -79,7 +79,18 @@
                 VerticalAlignment="Center" 
                 Width="195" 
                 Height="50" 
-                Click="btnCheckCard_Click" FontSize="16"/>
+                Click="btnCheckCard_Click" 
+                FontSize="16"/>
+            <Button
+                x:Name="btnClearListRegulation"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="100,160,10,10"
+                Padding="5"
+                Height="50"
+                FontSize="16"
+                Content="Обнулить список правил" 
+                Click="btnClearListRegulation_Click" />
         </StackPanel>
 
     </Grid>

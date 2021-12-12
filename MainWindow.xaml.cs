@@ -21,7 +21,7 @@ namespace Fund_monitoring
     /// </summary>
     public partial class MainWindow : Window
     {
-        NumberCard numberCard;
+        int numberCard;
         Cards cards;
         Dictionary<string, string> listRegulations;
 
@@ -31,12 +31,30 @@ namespace Fund_monitoring
             ParseXlsToJson.ParseAndSerializationXlsToJson();
         }
 
+        #region EventForBtnCheckCard
         private void btnCheckCard_Click(object sender, RoutedEventArgs e)
         {
             cards = new Cards();
-            if (inputNumberCard.Text.Length == 6) numberCard = new NumberCard(Convert.ToInt32(inputNumberCard.Text));
-            else MessageBox.Show("Вы ввели некорректный номер карты! \nДля проверки карты необходимо ввести 6 цифр.");
+
+            try
+            {
+                if (inputNumberCard.Text.Length == 6 && inputNumberCard.Text != "Введите номер карты")
+                {
+                    numberCard = Convert.ToInt32(inputNumberCard.Text);
+                    var card = SearchCardInListCards(numberCard, cards);
+                    (bool, string, string) resultCompare = CompareCardWithRegulations(card, listRegulations);
+                    OutputResultCompare(resultCompare);
+                }
+                else MessageBox.Show("Вы ввели некорректный номер карты! \nДля проверки карты необходимо ввести 6 цифр.");
+                    
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Вы ввели некорректный номер карты! \nДля проверки карты необходимо ввести 6 цифр.");
+            }
         }
+
+        #endregion
 
         #region EventForInputNumberCard
         private void inputNumberCard_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -60,27 +78,155 @@ namespace Fund_monitoring
         }
         #endregion
 
-
+        #region EventForCbTypeTransaction
         private void cbTypeTransaction_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             listRegulations = new Dictionary<string, string>();
         }
 
+        #endregion
+
+        #region EventForBtnClearListRegulation
+        private void btnClearListRegulation_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                listRegulations = new Dictionary<string, string>();
+                MessageBox.Show("Список правил успешно очищен.");
+            }
+            catch (Exception exc)
+            {
+                Debug.WriteLine($"Msg: {exc.Message}");
+                throw;
+            }
+        }
+        #endregion
+
+        #region EventForBtnAddRegulation
         private void btnAddRegulation_Click(object sender, RoutedEventArgs e)
         {
             if (listRegulations.Count == 0) listRegulations.Add("TypeTranzaction", cbTypeTransaction.Text);
-            if (cbTypeTransaction.SelectedIndex > -1 && 
-                cbRegulation.SelectedIndex > -1 && 
-                cbEquality.SelectedIndex > -1 && 
-                inputValueRegulation.Text != null && 
+            if (cbTypeTransaction.SelectedIndex > -1 &&
+                cbRegulation.SelectedIndex > -1 &&
+                cbEquality.SelectedIndex > -1 &&
+                inputValueRegulation.Text != null &&
                 inputValueRegulation.Text != "Введите значение правила")
             {
                 string equality;
                 if (cbEquality.Text == "Равно") equality = "=";
                 else equality = "!";
-                listRegulations.Add(cbRegulation.Text, equality + inputValueRegulation.Text.Trim().ToUpper());
+                try
+                {
+                    listRegulations.Add(cbRegulation.Text, equality + inputValueRegulation.Text.Trim().ToUpper());
+                    MessageBox.Show($"Правило успешно добавлено.");
+                }
+                catch (ArgumentException ArgExc)
+                {
+                    Debug.WriteLine($"Msg exception: {ArgExc.Message}");
+                    MessageBox.Show($"Ранее вы добавили правило похожее правило. \nОбнулите список или добавьте другое правило для проверки карты.");
+                }
+                
             }
             else MessageBox.Show("Вы не заполнили все поля для добавления правила");
         }
+
+        #endregion
+
+
+        private Dictionary<string, string> SearchCardInListCards(int numberCard, Cards cards)
+        {
+            var cardDict = new Dictionary<string, string>();
+
+            foreach (var card in cards.DataCards)
+            {
+                if (card.Bin == numberCard)
+                {
+                    cardDict.Add("ID", card.Id.ToString());
+                    cardDict.Add("BIN", card.Bin.ToString());
+                    cardDict.Add("BRAND", card.Brand);
+                    cardDict.Add("BANK_NAME", card.BankName);
+                    cardDict.Add("BIN_TYPE", card.BinType);
+                    cardDict.Add("BIN_LEVEL", card.BinLevel);
+                    cardDict.Add("ISO_COUNTRY", card.IsoCountry);
+                    cardDict.Add("COUNTRY_ISO", card.CountryIso);
+                    cardDict.Add("COUNTRY2_ISO", card.Country2Iso);
+                    cardDict.Add("COUNTRY3_ISO", card.Country3Iso.ToString());
+                    break;
+                }
+            }
+
+            return cardDict;
+        }
+
+        private (bool, string, string) CompareCardWithRegulations(Dictionary<string, string> card, Dictionary<string, string> regulations)
+        {
+            bool flag = default(bool);
+            (bool, string, string) tuple = default;
+
+            foreach (var item in card)
+            {
+                foreach (var reg in regulations)
+                {
+                    if (item.Key == reg.Key)
+                    {
+                        string regValue = reg.Value.ToString();
+                        string regValueSecondChar = Convert.ToString(regValue[0]);
+                        string remainingKeyValue = regValue.Remove(0,1);
+                        if (regValueSecondChar == "=")
+                        {
+                            if (item.Value == remainingKeyValue) 
+                            {
+                                flag = true;
+                                tuple = (flag, null, null);
+                            } 
+                            else
+                            {
+                                flag = false;
+                                tuple = (flag, item.Key.ToString(), reg.Value);
+                                break;
+                            }
+
+                        }
+                        else
+                        {
+                            if (item.Value != remainingKeyValue)
+                            {
+                                flag = true;
+                                tuple = (flag, null, null);
+                            }
+                            else
+                            {
+                                flag = false;
+                                tuple = (flag, item.Key.ToString(), reg.Value);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return tuple;
+        }
+
+        private void OutputResultCompare((bool, string, string) resultCompare)
+        {
+            if (resultCompare.Item1 == true)
+            {
+                MessageBox.Show("Введаная карта успешно прошла проверку по заданным правилам.");
+            }
+            else
+            {
+                if (resultCompare.Item3.First() == '!')
+                {
+                    MessageBox.Show($"Операция {listRegulations.First().Value.ToLower()} невозможна по причине {resultCompare.Item2} равен {resultCompare.Item3.Remove(0,1)}");
+                }
+                else
+                {
+                    MessageBox.Show($"Операция {listRegulations.First().Value.ToLower()} невозможна по причине {resultCompare.Item2} не равен {resultCompare.Item3.Remove(0,1)}");
+                }
+                
+            }
+        }
+
+
     }
 }
